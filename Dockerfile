@@ -1,6 +1,6 @@
 ARG flavor=bullseye
 
-FROM php:8.1-cli-${flavor}
+FROM php:8.2-cli-${flavor}
 
 LABEL maintainer="Tobias Munk <tobias@diemeisterei.de>"
 
@@ -8,20 +8,25 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN set -eux; \
     install-php-extensions \
-        bcmath \
-        mysqli \
-        pdo pdo_mysql pdo_pgsql \
-        soap \
-        sockets \
-        zip \
-        apcu-stable \
-        memcached-stable \
-        mongodb-stable \
-        xdebug-stable \
+        php82-bcmath \
+        php82-mysqli \
+        php82-pdo php82-pdo_mysql php82-pdo_pgsql \
+        php82-soap \
+        php82-sockets \
+        php82-zip \
+        php82-pecl-apcu-stable \
+        php82-pecl-memcached-stable \
+        php82-pecl-mongodb-stable \
+        php82-pecl-xdebug-stable \
         # and composer \
         @composer; \
     # Configure php \
     echo "date.timezone = UTC" >> /usr/local/etc/php/php.ini;
+RUN pecl install apcu \
+    && pecl install memcached \
+    && pecl install mongodb \
+	&& pecl install xdebug \
+	&& docker-php-ext-enable apcu memcached mongodb xdebug
 
 ENV COMPOSER_ALLOW_SUPERUSER '1'
 
