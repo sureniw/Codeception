@@ -18,6 +18,7 @@ RUN set -eux; \
         php82-pecl-memcached-stable \
         php82-pecl-mongodb-stable \
         php82-pecl-xdebug-stable \
+	php82-intl \
         # and composer \
         @composer; \
     # Configure php \
